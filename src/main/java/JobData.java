@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -75,7 +72,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -89,13 +86,42 @@ public class JobData {
      * @param value The search term to look for
      * @return      List of all jobs with at least one field containing the value
      */
+    //return an ArrayList where each entry is a HashMap of the job
     public static ArrayList<HashMap<String, String>> findByValue(String value) {
 
         // load data, if not already loaded
         loadData();
 
         // TODO - implement this method
-        return null;
+        //initialize an empty ArrayList named jobs to store search results
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        //iterate over allJobs record in the loaded data (for-each)
+        for (HashMap<String, String> job : allJobs) {
+          //iterate over each key-value pair in the job (for-each)
+            for (Map.Entry<String, String> entry : job.entrySet()) {
+                String entryValue = entry.getValue();
+
+                //if the entry contains the case-insensitive search add to job results
+                if (entryValue.toLowerCase().contains(value.toLowerCase())) {
+                    boolean duplicate = false;
+
+                    // check if the job is already in the results
+                    for (HashMap<String, String> existingJob : jobs) {
+                        if (existingJob.equals(job)) {
+                            duplicate = true;
+                            break;
+                        }
+                    }
+                    if (!duplicate) {
+                        jobs.add(job);
+                    }
+                    break;
+                 }
+
+            }
+        }
+        //return the list of searched jobs
+        return jobs;
     }
 
     /**

@@ -62,7 +62,7 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not implemented yet.");
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -119,7 +119,19 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+        //check to see if someJobs is empty. someJobs list is the parameter that holds the ArrayList of jobs
+        if (someJobs.isEmpty()) {
+            System.out.print("No Results");
+            return;
+        }
+        //iterate over each HashMap in the someJobs list using variable job
+        for (HashMap<String, String> job : someJobs) {
+            System.out.println("\n*****");
+            //iterate over each jobs in the HashMap. use entrySet() to get key-value pairs
+            for (Map.Entry<String, String> jobs : job.entrySet()) {
+              System.out.println(jobs.getKey() + ": " + jobs.getValue());
+            }
+            System.out.println("*****");
+        }
     }
 }
